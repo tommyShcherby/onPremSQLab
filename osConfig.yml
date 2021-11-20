@@ -1,0 +1,7 @@
+---
+ #Anything between <angle brackets> has to be filled-in before use.
+
+- name: Prepare the OS
+  hosts: all #for now
+  remore_user: <username>
+...
