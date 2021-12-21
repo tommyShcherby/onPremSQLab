@@ -1,7 +1,0 @@
----
- #Anything between <angle brackets> has to be filled-in before use.
-
-- name: Configure the DB
-  hosts: all #for now
-  remore_user: <username>
-...
