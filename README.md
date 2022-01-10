@@ -24,7 +24,8 @@ psql
 
 
 Platform Specification 
-The deployment is hosted locally on the workstation using Hyper-V. 
+The deployment is hosted locally on the workstation using Hyper-V.
+
 CentOS Stream 8 is used in anticipation of CentOS Linux 8 end-of-life Dec 2021. 
 
 
