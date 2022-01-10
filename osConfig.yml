@@ -22,4 +22,10 @@
     ansible.builtin.dnf:
       name: logwatch
       state: latest
+  
+  - name: Ensure systemd journal contents are retained
+    ansible.builtin.file:
+      path: /var/log/journal
+      state: directory
+      mode: '0700'
 ...
