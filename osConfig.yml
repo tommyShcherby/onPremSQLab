@@ -4,4 +4,22 @@
 - name: Prepare the OS
   hosts: all #for now
   remote_user: <username>
+  
+  tasks:
+  - name: Upgrade already installed packages
+    ansible.builtin.dnf:
+      name: "*"
+      state: latest
+  
+  - name: Install SELinux Policy tools
+    ansible.builtin.dnf:
+      name:
+        - policycoreutils-python-utils
+        - setools-console
+      state: latest
+  
+  - name: Install Logwatch
+    ansible.builtin.dnf:
+      name: logwatch
+      state: latest
 ...
