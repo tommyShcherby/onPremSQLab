@@ -28,4 +28,13 @@
       path: /var/log/journal
       state: directory
       mode: '0700'
+  
+  - name: Move the first network interface to the proper zone
+    ansible.posix.firewalld:
+      zone: drop
+      interface: <eth0>
+      permanent: yes
+      state: enabled
+      immediate: yes
+      
 ...
