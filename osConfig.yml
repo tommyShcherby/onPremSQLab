@@ -29,7 +29,7 @@
       state: directory
       mode: '0700'
   
-  - name: Move the first network interface to the proper zone
+  - name: Move the primary network interface to the proper zone
     ansible.posix.firewalld:
       zone: drop
       interface: <eth0>
@@ -46,6 +46,13 @@
       rich_rule:
         - rule family=ipv4 source address=<ipv4 address (Hyper-V host)>/<mask> service name=postgresql accept
         - rule family=ipv4 source address=<ipv4 address (Linux Guest 1)>/<mask> service name=ssh accept
-      
+   
+  - name: Move the secondary network interface to the proper zone
+    ansible.posix.firewalld:
+      zone: block
+      interface: <eth1>
+      state: enabled
+      permanent: yes
+      immediate: yes
       
 ...
