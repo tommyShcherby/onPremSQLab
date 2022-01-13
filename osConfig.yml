@@ -1,10 +1,14 @@
 ---
  #Anything between <angle brackets> has to be filled-in before use.
-
-- name: Prepare the OS
-  hosts: all #for now
+- name: GET AND CONFIGURE PYTHON
+  hosts: all
   remote_user: <username>
-  
+  tasks:
+  - name: (...)
+
+- name: PREPARE THE OS
+  hosts: all
+  remote_user: <username>
   tasks:
   - name: Upgrade already installed packages
     ansible.builtin.dnf:
@@ -63,4 +67,10 @@
   
   - name: Disable IPv6 on the secondary interface
     ansible.builtin.command: nmcli connection modify <eth1> ipv6.method disabled
+
+- name: CONFIGURE POSTGRESQL REPOSITORIES
+  hosts: all
+  remote_user: <username>
+  tasks:
+  - name: (...)
 ...
