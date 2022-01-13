@@ -3,12 +3,14 @@
 - name: GET AND CONFIGURE PYTHON
   hosts: all
   remote_user: <username>
+  become: yes
   tasks:
   - name: (...)
 
 - name: PREPARE THE OS
   hosts: all
   remote_user: <username>
+  become: yes
   tasks:
   - name: Upgrade already installed packages
     ansible.builtin.dnf:
@@ -71,6 +73,7 @@
 - name: CONFIGURE POSTGRESQL REPOSITORIES
   hosts: all
   remote_user: <username>
+  become: yes
   tasks:
   - name: Install the repository RPM
     ansible.builtin.command: dnf install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm
