@@ -60,4 +60,7 @@
       path: /etc/firewalld/firewalld.conf
       line: AllowZoneDrifting=no
       regexp: '^AllowZoneDrifting='
+  
+  - name: Disable IPv6 on the secondary interface
+    ansible.builtin.command: nmcli connection modify <eth1> ipv6.method disabled
 ...
