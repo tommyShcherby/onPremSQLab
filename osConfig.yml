@@ -54,5 +54,10 @@
       state: enabled
       permanent: yes
       immediate: yes
-      
+  
+  - name: Disable zone drifting
+    ansible.builtin.lineinfile:
+      path: /etc/firewalld/firewalld.conf
+      line: AllowZoneDrifting=no
+      regexp: '^AllowZoneDrifting='
 ...
