@@ -5,7 +5,8 @@
   remote_user: <username>
   become: yes
   tasks:
-  - name: (...)
+  - name: Bootstrap Python 3
+    ansible.builtin.raw: dnf install @python39
 
 - name: PREPARE THE OS
   hosts: all
