@@ -30,7 +30,7 @@
   - name: Move the primary network interface to the proper zone
     ansible.posix.firewalld:
       zone: drop
-      interface: <eth0>
+      interface: eth0
       state: enabled
       permanent: yes
       immediate: yes
@@ -48,7 +48,7 @@
   - name: Move the secondary network interface to the proper zone
     ansible.posix.firewalld:
       zone: block
-      interface: <eth1>
+      interface: eth1
       state: enabled
       permanent: yes
       immediate: yes
@@ -60,7 +60,7 @@
       regexp: '^AllowZoneDrifting='
   
   - name: Disable IPv6 on the secondary interface
-    ansible.builtin.command: nmcli connection modify <eth1> ipv6.method disabled
+    ansible.builtin.command: nmcli connection modify eth1 ipv6.method disabled
 
 - name: CONFIGURE POSTGRESQL REPOSITORIES
   hosts: laboratory
