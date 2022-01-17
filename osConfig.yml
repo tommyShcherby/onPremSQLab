@@ -1,16 +1,7 @@
 ---
  #Anything between <angle brackets> has to be filled-in before use.
-- name: GET AND CONFIGURE PYTHON
-  hosts: all
-  remote_user: <username>
-  become: yes
-  tasks:
-  - name: Bootstrap Python 3
-    ansible.builtin.raw: dnf install @python39
-
 - name: PREPARE THE OS
-  hosts: all
-  remote_user: <username>
+  hosts: laboratory
   become: yes
   tasks:
   - name: Upgrade already installed packages
@@ -72,8 +63,7 @@
     ansible.builtin.command: nmcli connection modify <eth1> ipv6.method disabled
 
 - name: CONFIGURE POSTGRESQL REPOSITORIES
-  hosts: all
-  remote_user: <username>
+  hosts: laboratory
   become: yes
   tasks:
   - name: Install the repository RPM
