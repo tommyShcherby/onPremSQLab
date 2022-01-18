@@ -35,15 +35,21 @@
       permanent: yes
       immediate: yes
   
-  - name: Add rich rules to the secondary zone
+  - name: Add the postgresql rich rule to the secondary zone
     ansible.posix.firewalld:
       zone: block
       state: enabled
       permanent: yes
       immediate: yes
-      rich_rule:
-        - rule family=ipv4 source address=<ipv4 address (Hyper-V host)>/<mask> service name=postgresql accept
-        - rule family=ipv4 source address=<ipv4 address (Linux Guest 1)>/<mask> service name=ssh accept
+      rich_rule: rule family=ipv4 source address=<ipv4 address (Hyper-V host)> service name=postgresql accept
+
+  - name: Add the ssh rich rule to the secondary zone
+    ansible.posix.firewalld:
+      zone: block
+      state: enabled
+      permanent: yes
+      immediate: yes
+      rich_rule: rule family=ipv4 source address=<ipv4 address (Linux Guest 1)> service name=ssh accept
    
   - name: Move the secondary network interface to the proper zone
     ansible.posix.firewalld:
@@ -60,7 +66,8 @@
       regexp: '^AllowZoneDrifting='
   
   - name: Disable IPv6 on the secondary interface
-    ansible.builtin.command: nmcli connection modify eth1 ipv6.method disabled
+    ansible.builtin.command: nmcli connection modify <howeverTheInterfaceGotNamed> ipv6.method disabled
+    #Please note that it might not be the same as device name.
 
 - name: CONFIGURE POSTGRESQL REPOSITORIES
   hosts: laboratory
