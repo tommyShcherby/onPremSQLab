@@ -1,4 +1,4 @@
-##PostgreSQL Deployment on Premise 
+## PostgreSQL Deployment on Premise 
 
 Version: 1.0.0 
 
