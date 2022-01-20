@@ -293,7 +293,7 @@ Hyper-V Checkpoints are disabled as they would never be used. The whole idea beh
   
 ###### Appendix B. Kickstart Installation 
 
-1) preparing the *Kickstart Drive*: 
+1) preparing the *Kickstart Drive* 
 
 A separate VHD has to be created and attached to the manually installed VM (Linux Guest 1). 
 
