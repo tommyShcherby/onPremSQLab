@@ -7,7 +7,7 @@ Version: 1.0.0
 
 A single-node PostgreSQL deployment for experimental purposes. 
 
-
+ 
 
 ###### Environment Summary (project’s unique components in bold): 
 
@@ -30,24 +30,24 @@ Linux Guest 1
 - **psql**
 
  
-
+ 
 ###### Platform Specification 
 
 The deployment is hosted locally on the workstation using Hyper-V. 
 
 CentOS Stream 8 is used in anticipation of CentOS Linux 8 end-of-life Dec 2021. 
 
- 
+  
 
 ###### Linux Guest 2 Virtual Machine Requirements 
 
 The Local Standard Disk is the only storage device. 
 
-As the database is not predicted to occupy more than 10GB of space, a total of 13GB would be the space requirement for the PostgreSQL component of the deployment. That is assuming DBsize * 0,1 for the transaction log, and DBsize * 0,2 for the backup needs. This will be used when sizing the initial deployment. 
+As the database is not predicted to occupy more than 10GB of space, a total of 13GB would be the space requirement for the PostgreSQL component of the deployment. That is assuming DBsize x 0,1 for the transaction log, and DBsize x 0,2 for the backup needs. This will be used when sizing the initial deployment. 
 
 The required 10GB of disk space for the operating system would bring the total to 23GB.  
 
-The swap space will be sized using the RAM*0,5 ratio. 
+The swap space will be sized using the RAM x 0,5 ratio. 
 
 Here a particular advantage of doing a Hyper-V deployment presents itself. Even though the disk size is very small the IOPS parameter is not artificially throttled. The IOPS throughput in public cloud deployments is always disk size dependent. 
 
@@ -93,7 +93,7 @@ The VM’s disk is not separately encrypted. The underlying SSD is already encry
 
 Kdump is deactivated, as I do not currently possess sufficient expertise to properly analyze the vmcore that would be written and specialist assistance is not available for this project. 
 
-The –noipv6 option sets the ipv6.method to “ignore” instead of “disabled”. That seems to be the way Kickstart is implemented and there is no way to specify the ipv6.method parameter directly using the native Kickstart syntax. 
+The –noipv6 option sets the ipv6.method to *ignore* instead of *disabled*. That seems to be the way Kickstart is implemented and there is no way to specify the ipv6.method parameter directly using the native Kickstart syntax. 
 
 As a result, the second network interface does receive an IPv6 address upon activation, the traffic is simply ignored. 
 
@@ -101,7 +101,7 @@ As a result, the second network interface does receive an IPv6 address upon acti
 
 ###### Operating System Configuration (Ansible Playbook) 
 
-RemoveIPC is already set to “no” inside /etc/systemd/logind.conf, so it will not be an issue with PostgreSQL. 
+RemoveIPC is already set to *no* inside `/etc/systemd/logind.conf`, so it will not be an issue with PostgreSQL. 
 
 Memory Overcommit should not be a problem with so few connections, so the OS’s overcommit behaviour need not be adjusted. 
 
@@ -111,17 +111,17 @@ To make sure the systemd journal content is saved between reboots
 ```
 /var/log/journal 
 ```
- is created. 
+is created. 
 
 Logwatch as well as packages required to get semanage and seinfo are installed. 
 
-To install PostgreSQL, a new repository is added as per instructions in the “Download” section on postgresql.org. 
+To install PostgreSQL, a new repository is added as per instructions in the *Download* section on postgresql.org. 
 
  
 
 ###### Networking Configuration (Ansible Playbook) 
 
-IPv6 disabled completely on the secondary network interface as Kickstart (for whatever reason) just sets its configuration to “ignore”. When set to “ignore”, the interface does not provide IPv6 connectivity, but still gets an IPv6 address. 
+IPv6 disabled completely on the secondary network interface as Kickstart (for whatever reason) just sets its configuration to *ignore*. When set to *ignore*, the interface does not provide IPv6 connectivity, but still gets an IPv6 address. 
 
 AllowZoneDrifting=no set in: 
 ```
@@ -129,11 +129,11 @@ AllowZoneDrifting=no set in:
 ```
 as this is the future default configuration. 
 
-Firewalld is by default putting the adapters in the “Public” zone with far too lenient rules. 
+Firewalld is by default putting the adapters in the *Public* zone with far too lenient rules. 
 
 The end goal is configuring Firewalld to: 
 
-- allow incoming “postgresql” traffic 
+- allow incoming *postgresql* traffic 
 
 - through the secondary interface (eth1) 
 
@@ -141,7 +141,7 @@ The end goal is configuring Firewalld to:
 
  
 
-- allow incoming “ssh” traffic 
+- allow incoming *ssh* traffic 
 
 - through the secondary interface (eth1) 
 
@@ -151,9 +151,9 @@ No inbound traffic is allowed via the primary interface (eth0).
 
 Used zones: 
 
-- Drop: OUT allowed, IN blocked without notifications. <eth0> 
+- Drop: OUT allowed, IN blocked without notifications. \<eth0\> 
 
-- Block: OUT allowed. IN blocked and notified. Rich rules added. <eth1> 
+- Block: OUT allowed. IN blocked and notified. Rich rules added. \<eth1\> 
 
  
 
@@ -175,7 +175,7 @@ Unless explicitly changed, the PostgreSQL server listens only for connections fr
 
 Whenever using the recommended approach of installing PostgreSQL from a repository 
 
-A new directory named pgsql-<version> is created in /usr/. 
+A new directory named pgsql-\<version\> is created in /usr/. 
 
 Symbolic links with the pattern: 
 ```
@@ -201,7 +201,7 @@ The cluster data is located in:
 
 As it currently stands, the *targeted* SELinux policy is enforced. 
 
-If during the course of the experiments any non-standard PostgreSQL configurations get introduced, SELinux booleans will be used to adapt the behaviour of the “targeted” policy. Such modifications for example are required whenever files labelled with a PostgreSQL-specific type are relocated in the filesystem. 
+If during the course of the experiments any non-standard PostgreSQL configurations get introduced, SELinux booleans will be used to adapt the behaviour of the *targeted* policy. Such modifications for example are required whenever files labelled with a PostgreSQL-specific type are relocated in the filesystem. 
 
 Sepgsql allows labelling of tables and functions by SELinux and provides another layer of access control. The use of sepgsql is in scope of another project exploring high security configurations. Setting it up here would enforce it in all higher-level projects building on this one – which is not the point. As with parts of the Networking Configuration it is mentioned here for completeness. 
 
@@ -211,7 +211,7 @@ Sepgsql allows labelling of tables and functions by SELinux and provides another
 
 FILESYSTEM 
 
-/usr/pgsql-<version> has the context: 
+/usr/pgsql-\<version\> has the context: 
 ```
 system_u:object_r:usr_t:s0 
 ```
@@ -233,7 +233,7 @@ CLIENT APPLICATIONS
 ```
 system_u:object_r:bin_t:s0 
 ```
-in its actual filesystem location (/usr/pgsql-<version>/bin/). 
+at its actual filesystem location (`/usr/pgsql-<version>/bin/`). 
 
  
 
@@ -245,13 +245,13 @@ The interoperation settings between journald and rsyslog are left with the defau
 ```
 e.g., ForwardToSyslog=no by default on RHEL & derivatives. In general, it means that rsyslog uses the journald API directly whenever it needs something only journald has access to. 
 
-As Storage=auto is the default, the easiest way to save the journald logs between reboots is to create a directory: 
+As `Storage=auto` is the default, the easiest way to save the journald logs between reboots is to create a directory: 
 ```
 /var/log/journal 
 ```
 , which is done in the Ansible Playbook. 
 
-The default logrotate configuration would only be changed if a particular experiment conducted in this environment would cause /var/log to fill up. 
+The default logrotate configuration would only be changed if a particular experiment conducted in this environment would cause `/var/log` to fill up. 
 
 When it comes to PostgreSQL-specific logging the default output method is the stderr of the main process - *postgres* or *postmaster* depending on the distribution. With additional configuration, the logs can be output using two other methods: csvlog, syslog. An example configuration would be: 
 ```
@@ -278,7 +278,7 @@ logwatch, sar, uptime, df, du, free, iostat, lsof, mpstat, vmstat
 
 ###### Shortcomings 
 
-While this project uses the “Infrastructure as Code” paradigm, it is not managed as “Immutable Infrastructure”. As such, any setting/package not explicitly declared in the automation files might introduce a configuration drift as defaults might change. 
+While this project uses the *Infrastructure as Code* paradigm, it is not managed as *Immutable Infrastructure*. As such, any setting/package not explicitly declared in the automation files might introduce a configuration drift as defaults might change. 
 
  
 
