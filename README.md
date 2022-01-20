@@ -89,7 +89,7 @@ The VM’s disk is not separately encrypted. The underlying SSD is already encry
 
 Kdump is deactivated, as I do not currently possess sufficient expertise to properly analyze the vmcore that would be written and specialist assistance is not available for this project. 
 
-The –noipv6 option sets the ipv6.method to *ignore* instead of *disabled*. That seems to be the way Kickstart is implemented and there is no way to specify the ipv6.method parameter directly using the native Kickstart syntax. 
+The `–noipv6` option sets the ipv6.method to *ignore* instead of *disabled*. That seems to be the way Kickstart is implemented and there is no way to specify the ipv6.method parameter directly using the native Kickstart syntax. 
 
 As a result, the second network interface does receive an IPv6 address upon activation, the traffic is simply ignored.  
   
@@ -117,7 +117,7 @@ To install PostgreSQL, a new repository is added as per instructions in the *Dow
 
 IPv6 disabled completely on the secondary network interface as Kickstart (for whatever reason) just sets its configuration to *ignore*. When set to *ignore*, the interface does not provide IPv6 connectivity, but still gets an IPv6 address. 
 
-AllowZoneDrifting=no set in: 
+`AllowZoneDrifting=no` set in: 
 ```
 /etc/firewalld/firewalld.conf 
 ```
@@ -149,11 +149,12 @@ Used zones:
   
   
 Firewalld has the “postgresql” and “ssh” services defined which allows to simply add the following rich rules: 
-
-**rule family=ipv4 source address=<ipv4 address (Hyper-V host)> service name=postgresql accept**
-
-**rule family=ipv4 source address=<ipv4 address (Linux Guest 1)> service name=ssh accept**
-
+```
+rule family=ipv4 source address=<ipv4 address (Hyper-V host)> service name=postgresql accept
+```
+```
+rule family=ipv4 source address=<ipv4 address (Linux Guest 1)> service name=ssh accept
+```
 The secondary interfaces of all the machines in the environment are connected to a Hyper-V Internal vSwitch and have no ability to reach systems other than those with the IP addresses of the subnet. 
 
 For a high security configuration, outbound rules would be modified – left to the scope of a higher-level project building on this one. 
@@ -177,7 +178,7 @@ Symbolic links with the pattern:
 ```
 are created for the different client applications (e.g., createdb, psql) included in the binary installation. 
 
-The main server process is named “postmaster” on CentOS 8. 
+The main server process is named *postmaster* in CentOS 8. 
 
 The cluster data is located in: 
 ```
