@@ -3,15 +3,13 @@
 Version: 1.0.0 
 
 
-
-Project Description 
+###### Project Description 
 
 A single-node PostgreSQL deployment for experimental purposes. 
 
 
 
-
-Environment Summary (project’s unique components in bold): 
+###### Environment Summary (project’s unique components in bold): 
 
 Windows Host 
 
@@ -33,7 +31,7 @@ Linux Guest 1
 
  
 
-Platform Specification 
+###### Platform Specification 
 
 The deployment is hosted locally on the workstation using Hyper-V. 
 
@@ -41,7 +39,7 @@ CentOS Stream 8 is used in anticipation of CentOS Linux 8 end-of-life Dec 2021.
 
  
 
-Linux Guest 2 Virtual Machine Requirements 
+###### Linux Guest 2 Virtual Machine Requirements 
 
 The Local Standard Disk is the only storage device. 
 
@@ -65,7 +63,7 @@ Linux Guest 2 Initial Sizing:
 
  
 
-Operating System Installation Settings (Kickstart) 
+###### Operating System Installation Settings (Kickstart) 
 
 Automatic Partitioning would not be sufficient. 
 
@@ -101,9 +99,7 @@ As a result, the second network interface does receive an IPv6 address upon acti
 
  
 
-Operating System Configuration (Ansible Playbook) 
-
-
+###### Operating System Configuration (Ansible Playbook) 
 
 RemoveIPC is already set to “no” inside /etc/systemd/logind.conf, so it will not be an issue with PostgreSQL. 
 
@@ -123,7 +119,7 @@ To install PostgreSQL, a new repository is added as per instructions in the “D
 
  
 
-Networking Configuration (Ansible Playbook) 
+###### Networking Configuration (Ansible Playbook) 
 
 IPv6 disabled completely on the secondary network interface as Kickstart (for whatever reason) just sets its configuration to “ignore”. When set to “ignore”, the interface does not provide IPv6 connectivity, but still gets an IPv6 address. 
 
@@ -175,7 +171,7 @@ Unless explicitly changed, the PostgreSQL server listens only for connections fr
 
  
 
-PostgreSQL Operating System Footprint 
+###### PostgreSQL Operating System Footprint 
 
 Whenever using the recommended approach of installing PostgreSQL from a repository 
 
@@ -199,7 +195,7 @@ The cluster data is located in:
 ```
  
 
-Security Considerations 
+###### Security Considerations 
 
 *Security through Obscurity* is not going to be used. PostgreSQL listens on a standard port, but the Firewalld rules only permit such access from a specific source IP address. 
 
@@ -211,7 +207,7 @@ Sepgsql allows labelling of tables and functions by SELinux and provides another
 
  
 
-Security Footprint (*targeted* policy) 
+###### Security Footprint (*targeted* policy) 
 
 FILESYSTEM 
 
@@ -241,7 +237,7 @@ in its actual filesystem location (/usr/pgsql-<version>/bin/).
 
  
 
-Logging Considerations 
+###### Logging Considerations 
 
 The interoperation settings between journald and rsyslog are left with the defaults found in: 
 ```
@@ -270,7 +266,7 @@ Shipping logs to “Linux Guest 1” aka the “management machine” was consid
 
  
 
-Monitoring Considerations 
+###### Monitoring Considerations 
 
 Using a real-time (e.g., Nagios) or time-series (e.g., Prometheus) monitoring database, although an informative experiment would be an extreme overhead for what this project is supposed to accomplish. 
 
@@ -280,19 +276,19 @@ logwatch, sar, uptime, df, du, free, iostat, lsof, mpstat, vmstat
 ```
  
 
-Shortcomings 
+###### Shortcomings 
 
 While this project uses the “Infrastructure as Code” paradigm, it is not managed as “Immutable Infrastructure”. As such, any setting/package not explicitly declared in the automation files might introduce a configuration drift as defaults might change. 
 
  
 
-Automation (Infrastructure as Code) 
+###### Automation (Infrastructure as Code) 
 
 Kickstart file, Ansible Playbook 
 
 
 
-Appendix A. Virtual Machine Creation Procedure
+###### Appendix A. Virtual Machine Creation Procedure
  
 A .vhdx format, fixed size virtual disk is created first, with the capacity stated in the VM requirements. 
 
@@ -310,7 +306,7 @@ Hyper-V Checkpoints are disabled as they would never be used. The whole idea beh
 
 
 
-Appendix B. Kickstart Installation 
+###### Appendix B. Kickstart Installation 
 
 1) preparing the *Kickstart Drive*: 
 
