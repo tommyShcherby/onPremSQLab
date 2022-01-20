@@ -1,14 +1,13 @@
 ## PostgreSQL Deployment on Premise 
 
 Version: 1.0.0 
-
-
+  
+  
 ###### Project Description 
 
-A single-node PostgreSQL deployment for experimental purposes. 
-
- 
-
+A single-node PostgreSQL deployment for experimental purposes.
+  
+  
 ###### Environment Summary (project’s unique components in bold): 
 
 Windows Host 
@@ -28,17 +27,15 @@ Linux Guest 1
 - **PostgreSQL (server)**
 
 - **psql**
-
- 
- 
+  
+  
 ###### Platform Specification 
 
 The deployment is hosted locally on the workstation using Hyper-V. 
 
 CentOS Stream 8 is used in anticipation of CentOS Linux 8 end-of-life Dec 2021. 
-
   
-
+  
 ###### Linux Guest 2 Virtual Machine Requirements 
 
 The Local Standard Disk is the only storage device. 
@@ -60,9 +57,8 @@ Linux Guest 2 Initial Sizing:
 - 2 GiB RAM 
 
 - 25GB vHDD (underlying SSD) 
-
- 
-
+  
+  
 ###### Operating System Installation Settings (Kickstart) 
 
 Automatic Partitioning would not be sufficient. 
@@ -96,9 +92,8 @@ Kdump is deactivated, as I do not currently possess sufficient expertise to prop
 The –noipv6 option sets the ipv6.method to *ignore* instead of *disabled*. That seems to be the way Kickstart is implemented and there is no way to specify the ipv6.method parameter directly using the native Kickstart syntax. 
 
 As a result, the second network interface does receive an IPv6 address upon activation, the traffic is simply ignored. 
-
- 
-
+  
+  
 ###### Operating System Configuration (Ansible Playbook) 
 
 RemoveIPC is already set to *no* inside `/etc/systemd/logind.conf`, so it will not be an issue with PostgreSQL. 
@@ -116,9 +111,8 @@ is created.
 Logwatch as well as packages required to get semanage and seinfo are installed. 
 
 To install PostgreSQL, a new repository is added as per instructions in the *Download* section on postgresql.org. 
-
- 
-
+  
+  
 ###### Networking Configuration (Ansible Playbook) 
 
 IPv6 disabled completely on the secondary network interface as Kickstart (for whatever reason) just sets its configuration to *ignore*. When set to *ignore*, the interface does not provide IPv6 connectivity, but still gets an IPv6 address. 
@@ -137,10 +131,8 @@ The end goal is configuring Firewalld to:
 
 - through the secondary interface (eth1) 
 
-- from the static IP address of the Windows 10 Hyper-V host 
-
- 
-
+- from the static IP address of the Windows 10 Hyper-V host
+  
 - allow incoming *ssh* traffic 
 
 - through the secondary interface (eth1) 
@@ -154,9 +146,8 @@ Used zones:
 - Drop: OUT allowed, IN blocked without notifications. \<eth0\> 
 
 - Block: OUT allowed. IN blocked and notified. Rich rules added. \<eth1\> 
-
- 
-
+  
+  
 Firewalld has the “postgresql” and “ssh” services defined which allows to simply add the following rich rules: 
 
 **rule family=ipv4 source address=<ipv4 address (Hyper-V host)> service name=postgresql accept**
@@ -168,9 +159,8 @@ The secondary interfaces of all the machines in the environment are connected to
 For a high security configuration, outbound rules would be modified – left to the scope of a higher-level project building on this one. 
 
 Unless explicitly changed, the PostgreSQL server listens only for connections from the localhost address, so another configuration step is required to use pgAdmin from the Hyper-V host. After the project redesign, this topic is in the scope of another project – just mentioned here for completeness. 
-
- 
-
+  
+  
 ###### PostgreSQL Operating System Footprint 
 
 Whenever using the recommended approach of installing PostgreSQL from a repository 
@@ -193,8 +183,8 @@ The cluster data is located in:
 ```
 /var/lib/pgsql/<version>/data/ 
 ```
- 
-
+  
+  
 ###### Security Considerations 
 
 *Security through Obscurity* is not going to be used. PostgreSQL listens on a standard port, but the Firewalld rules only permit such access from a specific source IP address. 
@@ -204,9 +194,8 @@ As it currently stands, the *targeted* SELinux policy is enforced.
 If during the course of the experiments any non-standard PostgreSQL configurations get introduced, SELinux booleans will be used to adapt the behaviour of the *targeted* policy. Such modifications for example are required whenever files labelled with a PostgreSQL-specific type are relocated in the filesystem. 
 
 Sepgsql allows labelling of tables and functions by SELinux and provides another layer of access control. The use of sepgsql is in scope of another project exploring high security configurations. Setting it up here would enforce it in all higher-level projects building on this one – which is not the point. As with parts of the Networking Configuration it is mentioned here for completeness. 
-
- 
-
+  
+  
 ###### Security Footprint (*targeted* policy) 
 
 FILESYSTEM 
@@ -234,9 +223,8 @@ CLIENT APPLICATIONS
 system_u:object_r:bin_t:s0 
 ```
 at its actual filesystem location (`/usr/pgsql-<version>/bin/`). 
-
- 
-
+  
+  
 ###### Logging Considerations 
 
 The interoperation settings between journald and rsyslog are left with the defaults found in: 
@@ -263,9 +251,8 @@ There is also an option of using pgBadger – a tool designed specifically to wo
 As was the case with parts of the Networking Configuration and Security Considerations, after the redesign, any particular PostgreSQL server configuration is in the scope of another project, and only mentioned here for completeness. 
 
 Shipping logs to “Linux Guest 1” aka the “management machine” was considered, but the two machines are ON at the same time only under very specific circumstances. Log shipping would make more sense in a deployment where the target machine is constantly ON. 
-
- 
-
+  
+  
 ###### Monitoring Considerations 
 
 Using a real-time (e.g., Nagios) or time-series (e.g., Prometheus) monitoring database, although an informative experiment would be an extreme overhead for what this project is supposed to accomplish. 
@@ -274,20 +261,18 @@ Instead, a toolbox of shell tools will be used from time to time to check the pu
 ```
 logwatch, sar, uptime, df, du, free, iostat, lsof, mpstat, vmstat 
 ```
- 
-
+  
+  
 ###### Shortcomings 
 
 While this project uses the *Infrastructure as Code* paradigm, it is not managed as *Immutable Infrastructure*. As such, any setting/package not explicitly declared in the automation files might introduce a configuration drift as defaults might change. 
-
- 
-
+  
+  
 ###### Automation (Infrastructure as Code) 
 
 Kickstart file, Ansible Playbook 
-
-
-
+  
+  
 ###### Appendix A. Virtual Machine Creation Procedure
  
 A .vhdx format, fixed size virtual disk is created first, with the capacity stated in the VM requirements. 
@@ -303,9 +288,8 @@ A VHD prepared as described in Appendix A is added under the SCSI Controller aft
 The Secure Boot template is changed to Microsoft UEFI Certificate Authority. 
 
 Hyper-V Checkpoints are disabled as they would never be used. The whole idea behind this project is that the deployment can be recreated easily from scratch if necessary. 
-
-
-
+  
+  
 ###### Appendix B. Kickstart Installation 
 
 1) preparing the *Kickstart Drive*: 
