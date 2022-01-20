@@ -8,7 +8,7 @@ Version: 1.0.0
 A single-node PostgreSQL deployment for experimental purposes.  
   
   
-###### Environment Summary (project’s unique components in bold): 
+###### Environment Summary (project’s unique components in **bold**): 
 
 Windows Host 
 
