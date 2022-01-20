@@ -1,11 +1,11 @@
 ## PostgreSQL Deployment on Premise 
 
-Version: 1.0.0 
+Version: 1.0.0  
   
   
 ###### Project Description 
 
-A single-node PostgreSQL deployment for experimental purposes.
+A single-node PostgreSQL deployment for experimental purposes.  
   
   
 ###### Environment Summary (project’s unique components in bold): 
@@ -26,14 +26,14 @@ Linux Guest 1
 
 - **PostgreSQL (server)**
 
-- **psql**
+- **psql**  
   
   
 ###### Platform Specification 
 
 The deployment is hosted locally on the workstation using Hyper-V. 
 
-CentOS Stream 8 is used in anticipation of CentOS Linux 8 end-of-life Dec 2021. 
+CentOS Stream 8 is used in anticipation of CentOS Linux 8 end-of-life Dec 2021.  
   
   
 ###### Linux Guest 2 Virtual Machine Requirements 
@@ -56,7 +56,7 @@ Linux Guest 2 Initial Sizing:
 
 - 2 GiB RAM 
 
-- 25GB vHDD (underlying SSD) 
+- 25GB vHDD (underlying SSD)  
   
   
 ###### Operating System Installation Settings (Kickstart) 
@@ -91,7 +91,7 @@ Kdump is deactivated, as I do not currently possess sufficient expertise to prop
 
 The –noipv6 option sets the ipv6.method to *ignore* instead of *disabled*. That seems to be the way Kickstart is implemented and there is no way to specify the ipv6.method parameter directly using the native Kickstart syntax. 
 
-As a result, the second network interface does receive an IPv6 address upon activation, the traffic is simply ignored. 
+As a result, the second network interface does receive an IPv6 address upon activation, the traffic is simply ignored.  
   
   
 ###### Operating System Configuration (Ansible Playbook) 
@@ -110,7 +110,7 @@ is created.
 
 Logwatch as well as packages required to get semanage and seinfo are installed. 
 
-To install PostgreSQL, a new repository is added as per instructions in the *Download* section on postgresql.org. 
+To install PostgreSQL, a new repository is added as per instructions in the *Download* section on postgresql.org.  
   
   
 ###### Networking Configuration (Ansible Playbook) 
@@ -158,7 +158,7 @@ The secondary interfaces of all the machines in the environment are connected to
 
 For a high security configuration, outbound rules would be modified – left to the scope of a higher-level project building on this one. 
 
-Unless explicitly changed, the PostgreSQL server listens only for connections from the localhost address, so another configuration step is required to use pgAdmin from the Hyper-V host. After the project redesign, this topic is in the scope of another project – just mentioned here for completeness. 
+Unless explicitly changed, the PostgreSQL server listens only for connections from the localhost address, so another configuration step is required to use pgAdmin from the Hyper-V host. After the project redesign, this topic is in the scope of another project – just mentioned here for completeness.  
   
   
 ###### PostgreSQL Operating System Footprint 
@@ -181,8 +181,8 @@ The main server process is named “postmaster” on CentOS 8.
 
 The cluster data is located in: 
 ```
-/var/lib/pgsql/<version>/data/ 
-```
+/var/lib/pgsql/<version>/data/
+```  
   
   
 ###### Security Considerations 
@@ -193,7 +193,7 @@ As it currently stands, the *targeted* SELinux policy is enforced.
 
 If during the course of the experiments any non-standard PostgreSQL configurations get introduced, SELinux booleans will be used to adapt the behaviour of the *targeted* policy. Such modifications for example are required whenever files labelled with a PostgreSQL-specific type are relocated in the filesystem. 
 
-Sepgsql allows labelling of tables and functions by SELinux and provides another layer of access control. The use of sepgsql is in scope of another project exploring high security configurations. Setting it up here would enforce it in all higher-level projects building on this one – which is not the point. As with parts of the Networking Configuration it is mentioned here for completeness. 
+Sepgsql allows labelling of tables and functions by SELinux and provides another layer of access control. The use of sepgsql is in scope of another project exploring high security configurations. Setting it up here would enforce it in all higher-level projects building on this one – which is not the point. As with parts of the Networking Configuration it is mentioned here for completeness.  
   
   
 ###### Security Footprint (*targeted* policy) 
@@ -222,7 +222,7 @@ CLIENT APPLICATIONS
 ```
 system_u:object_r:bin_t:s0 
 ```
-at its actual filesystem location (`/usr/pgsql-<version>/bin/`). 
+at its actual filesystem location (`/usr/pgsql-<version>/bin/`).  
   
   
 ###### Logging Considerations 
@@ -250,7 +250,7 @@ There is also an option of using pgBadger – a tool designed specifically to wo
 
 As was the case with parts of the Networking Configuration and Security Considerations, after the redesign, any particular PostgreSQL server configuration is in the scope of another project, and only mentioned here for completeness. 
 
-Shipping logs to “Linux Guest 1” aka the “management machine” was considered, but the two machines are ON at the same time only under very specific circumstances. Log shipping would make more sense in a deployment where the target machine is constantly ON. 
+Shipping logs to “Linux Guest 1” aka the “management machine” was considered, but the two machines are ON at the same time only under very specific circumstances. Log shipping would make more sense in a deployment where the target machine is constantly ON.  
   
   
 ###### Monitoring Considerations 
@@ -260,17 +260,17 @@ Using a real-time (e.g., Nagios) or time-series (e.g., Prometheus) monitoring da
 Instead, a toolbox of shell tools will be used from time to time to check the pulse of the system. 
 ```
 logwatch, sar, uptime, df, du, free, iostat, lsof, mpstat, vmstat 
-```
+```  
   
   
 ###### Shortcomings 
 
-While this project uses the *Infrastructure as Code* paradigm, it is not managed as *Immutable Infrastructure*. As such, any setting/package not explicitly declared in the automation files might introduce a configuration drift as defaults might change. 
+While this project uses the *Infrastructure as Code* paradigm, it is not managed as *Immutable Infrastructure*. As such, any setting/package not explicitly declared in the automation files might introduce a configuration drift as defaults might change.  
   
   
 ###### Automation (Infrastructure as Code) 
 
-Kickstart file, Ansible Playbook 
+Kickstart file, Ansible Playbook  
   
   
 ###### Appendix A. Virtual Machine Creation Procedure
@@ -287,7 +287,7 @@ A VHD prepared as described in Appendix A is added under the SCSI Controller aft
 
 The Secure Boot template is changed to Microsoft UEFI Certificate Authority. 
 
-Hyper-V Checkpoints are disabled as they would never be used. The whole idea behind this project is that the deployment can be recreated easily from scratch if necessary. 
+Hyper-V Checkpoints are disabled as they would never be used. The whole idea behind this project is that the deployment can be recreated easily from scratch if necessary.  
   
   
 ###### Appendix B. Kickstart Installation 
@@ -300,7 +300,7 @@ It should then be formatted with xfs, labeled *OEMDRV* and mounted.
 
 Note that the Kickstart file available in this repository requires modification before use. Any \<placeholders\> should be replaced with correct strings, and the file has to be renamed “ks.cfg”. 
 
-The prepared ks.cfg file should be copied to the root of the OEMDRV-labelled filesystem. 
+The prepared ks.cfg file should be copied to the root of the OEMDRV-labelled filesystem.
 
 The drive should be unmounted. After shutting down the manually installed VM, the drive should be disconnected in Hyper-V. 
 
