@@ -159,7 +159,7 @@ The secondary interfaces of all the machines in the environment are connected to
 
 For a high security configuration, outbound rules would be modified – left to the scope of a higher-level project building on this one. 
 
-Unless explicitly changed, the PostgreSQL server listens only for connections from the localhost address, so another configuration step is required to use pgAdmin from the Hyper-V host. After the project redesign, this topic is in the scope of another project – just mentioned here for completeness.  
+Unless explicitly changed, the PostgreSQL server only listens for connections from the localhost address, so another configuration step is required to use pgAdmin from the Hyper-V host. After the project redesign, this topic is in the scope of another project – just mentioned here for completeness.  
   
   
 ###### PostgreSQL Operating System Footprint 
@@ -274,17 +274,17 @@ While this project uses the *Infrastructure as Code* paradigm, it is not managed
 Kickstart file, Ansible Playbook  
   
   
-###### Appendix A. Virtual Machine Creation Procedure
+###### Appendix A. Virtual Machine Setup Procedure
  
 A .vhdx format, fixed size virtual disk is created first, with the capacity stated in the VM requirements. 
 
-Type 2 VM is selected. 
+Type 2 VM is selected. The fixed size virtual disk is attached in the creation wizard.
 
 A Hyper-V VM gets created with 1 vCPU assigned. If required for a particular VM an additional vCPU will be added after creation to match the requirements. 
 
 A vDVD containing the .iso is added under the SCSI Controller after the VM creation. 
 
-A VHD prepared as described in Appendix A is added under the SCSI Controller after the VM creation. 
+A VHD prepared as described in Appendix B is added under the SCSI Controller after the VM creation. 
 
 The Secure Boot template is changed to Microsoft UEFI Certificate Authority. 
 
