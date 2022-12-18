@@ -297,7 +297,7 @@ Hyper-V Checkpoints are disabled as they would never be used. The whole idea beh
 
 A separate VHD has to be created and attached to the manually installed VM (Linux Guest 1). 
 
-It should then be formatted with xfs, labeled *OEMDRV* and mounted. 
+It should then be formatted with xfs, labelled *OEMDRV* and mounted. 
 
 Note that the Kickstart file available in this repository requires modification before use. Any \<placeholders\> should be replaced with correct strings, and the file has to be renamed “ks.cfg”. 
 
